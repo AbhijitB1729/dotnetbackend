@@ -12,5 +12,7 @@ namespace RegisterAPI.Models
         public DbSet<Detail> Details { get; set; }
         public DbSet<GrantDetail> GrantDetails { get; set; }
 
+        
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Infrastructure.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RegisterAPI.Models;
@@ -12,15 +13,16 @@ namespace RegisterAPI.Controllers
     [Route("api/[controller]")]
 
 
+
     public class DetailsController : Controller
     {
         private readonly DetailsAPIDbContext dbContext;
         private readonly IConfiguration _config;
-       public DetailsController(DetailsAPIDbContext dbContext,IConfiguration config)
+        public DetailsController(DetailsAPIDbContext dbContext, IConfiguration config)
         {
             this.dbContext=dbContext;
             _config= config;
-        }   
+        }
 
         [HttpPost]
         [Route("LoginUsers")]
@@ -29,21 +31,22 @@ namespace RegisterAPI.Controllers
         {
             var userAvailable =
                 await dbContext.Details.Where(x => x.Email == user.Email && x.Password ==  user.Password).FirstOrDefaultAsync();
-           if (userAvailable != null)
+            if (userAvailable != null)
             {
                 var token = GenerateToken(userAvailable.Email);
                 return Ok(new
                 {
-                    StatusCode = 200,
-                    Message = "Logged in successfully",
-                    JwtToken = token
+                    StatusCode = 200,        
+                    JwtToken = token,
+                    Name=userAvailable.FirstName,   
+                    Role=userAvailable.Role,
                 });
 
             };
             return Unauthorized("incorrect credentials ");
-           
+
         }
-      private string GenerateToken(string email)
+        private string GenerateToken(string email)
         {
             var tokenhandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:key"]));
@@ -58,25 +61,25 @@ namespace RegisterAPI.Controllers
               audience: _config["Jwt:Audience"],
               claims,
               expires: DateTime.Now.AddDays(1),
-              signingCredentials: credential); 
+              signingCredentials: credential);
 
-            
+
             return tokenhandler.WriteToken(token);
         }
-       
-            
-            
-            
-            
-            [HttpGet]
+
+
+
+
+
+        [HttpGet]
         public async Task<IActionResult> GetDetails()
         {
             return Ok(await dbContext.Details.ToListAsync(
                 ));
-            
+
         }
 
-        [HttpPost]  
+        [HttpPost]
 
         public async Task<IActionResult> AddUser(Detail detail)
         {
@@ -86,25 +89,27 @@ namespace RegisterAPI.Controllers
                 Password = detail.Password,
                 FirstName = detail.FirstName,
                 LastName = detail.LastName,
+                Role=detail.Role,
             };
             if (!dbContext.Details.Any(u => u.Email == user.Email))
             {
-                
-               await dbContext.Details.AddAsync(user);
-               await dbContext.SaveChangesAsync();
+
+                await dbContext.Details.AddAsync(user);
+                await dbContext.SaveChangesAsync();
                 return Ok(user);
             }
             else
             {
-               
+
                 return BadRequest("Entity already exists");
             }
-           
+
         }
+
 
         [HttpDelete]
 
-        public async Task<IActionResult> DeleteUser(string email )
+        public async Task<IActionResult> DeleteUser(string email)
         {
             var user = await dbContext.Details.FirstOrDefaultAsync(u => u.Email == email);
             if (user != null)
@@ -113,7 +118,7 @@ namespace RegisterAPI.Controllers
                 await dbContext.SaveChangesAsync();
                 return Ok(user);
             }
-            return NotFound();  
+            return NotFound();
         }
     }
 }

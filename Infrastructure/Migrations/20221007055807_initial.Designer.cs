@@ -12,8 +12,8 @@ using RegisterAPI.Models;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DetailsAPIDbContext))]
-    [Migration("20220921114630_initialMigration")]
-    partial class initialMigration
+    [Migration("20221007055807_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,6 +63,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
