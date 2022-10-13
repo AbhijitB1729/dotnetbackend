@@ -1,4 +1,5 @@
-﻿using Infrastructure.Models;
+﻿
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -89,7 +90,7 @@ namespace RegisterAPI.Controllers
                 Password = detail.Password,
                 FirstName = detail.FirstName,
                 LastName = detail.LastName,
-                Role=detail.Role,
+                Role="user",
             };
             if (!dbContext.Details.Any(u => u.Email == user.Email))
             {

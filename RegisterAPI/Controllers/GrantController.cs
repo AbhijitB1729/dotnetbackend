@@ -1,4 +1,5 @@
-﻿using Infrastructure.Models;
+﻿
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegisterAPI.Models;
@@ -20,15 +21,15 @@ namespace RegisterAPI.Controllers
         public async Task<IActionResult> GetAllDetail()
         {
             var details = await detailsDb.GrantDetails.ToListAsync();
-            return Ok(details); 
-          
+            return Ok(details);
+
         }
 
         [HttpPost]
 
         public async Task<IActionResult> AddDetails(GrantDetail grantDetailRequest)
         {
-            grantDetailRequest.Id = Guid.NewGuid();
+          //  grantDetailRequest.Id = Guid.NewGuid();
             await detailsDb.GrantDetails.AddAsync(grantDetailRequest);
             await detailsDb.SaveChangesAsync();
 
@@ -36,9 +37,9 @@ namespace RegisterAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{id:Guid}")]
+        [Route("{id:int}")]
 
-        public async Task<IActionResult> GetDetail([FromRoute] Guid id)
+        public async Task<IActionResult> GetDetail([FromRoute] int id)
         {
             var detail = await detailsDb.GrantDetails.FirstOrDefaultAsync(x => x.Id==id);
 
@@ -47,15 +48,15 @@ namespace RegisterAPI.Controllers
                 return NotFound();
 
             }
-           return Ok(detail);
+            return Ok(detail);
         }
 
-        [HttpPut]
-        [Route("{id:Guid}")]
+        [HttpPut("{id}")]     
 
-        public async Task<IActionResult> UpdateDetail([FromRoute] Guid id , GrantDetail updateGrantRequest)
+        public async Task<IActionResult> UpdateDetail(int id, GrantDetail updateGrantRequest)
         {
-            var detail = await detailsDb.GrantDetails.FindAsync(id);
+            var detail = await detailsDb.GrantDetails.FirstOrDefaultAsync(x => x.Id==id);
+            
             if (detail == null)
             {
                 return NotFound();
@@ -74,13 +75,13 @@ namespace RegisterAPI.Controllers
 
         }
         [HttpDelete]
-        [Route("{id:Guid}")]
+        [Route("{id:int}")]
 
-        public async Task<IActionResult> DeleteDetail([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteDetail([FromRoute] int id)
 
         {
-            var detail = await detailsDb.GrantDetails.FindAsync(id);    
-            if(detail==null)
+            var detail = await detailsDb.GrantDetails.FindAsync(id);
+            if (detail==null)
             {
                 return NotFound();
             }
@@ -88,7 +89,7 @@ namespace RegisterAPI.Controllers
             await detailsDb.SaveChangesAsync();
 
             return Ok(detail);
-        
+
         }
 
     }

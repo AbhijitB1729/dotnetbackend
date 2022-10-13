@@ -12,8 +12,8 @@ using RegisterAPI.Models;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DetailsAPIDbContext))]
-    [Migration("20221007055807_initial")]
-    partial class initial
+    [Migration("20221011042002_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,9 +26,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.GrantDetail", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");

@@ -10,7 +10,7 @@ namespace Infrastructure.Models
     public class GrantDetail
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string GrantName { get; set; }
