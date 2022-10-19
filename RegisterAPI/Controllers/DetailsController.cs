@@ -39,8 +39,10 @@ namespace RegisterAPI.Controllers
                 {
                     StatusCode = 200,        
                     JwtToken = token,
-                    Name=userAvailable.FirstName,   
+                    FirstName=userAvailable.FirstName,   
+                    LastName=userAvailable.LastName,
                     Role=userAvailable.Role,
+                    Email=userAvailable.Email,
                 });
 
             };
@@ -61,7 +63,7 @@ namespace RegisterAPI.Controllers
               issuer: _config["Jwt:Issuer"],
               audience: _config["Jwt:Audience"],
               claims,
-              expires: DateTime.Now.AddDays(1),
+              expires: DateTime.Now.AddHours(1),
               signingCredentials: credential);
 
 
