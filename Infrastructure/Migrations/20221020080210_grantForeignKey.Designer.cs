@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegisterAPI.Models;
 
@@ -11,9 +12,10 @@ using RegisterAPI.Models;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DetailsAPIDbContext))]
-    partial class DetailsAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020080210_grantForeignKey")]
+    partial class grantForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,40 +86,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("ApplicantDetails");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.EducationalDetail", b =>
-                {
-                    b.Property<int>("EducationalDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EducationalDetailId"), 1L, 1);
-
-                    b.Property<int>("ApplicantDetailApplicantId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("CourseName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstitutionName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("YearOfCompletion")
-                        .HasColumnType("int");
-
-                    b.HasKey("EducationalDetailId");
-
-                    b.HasIndex("ApplicantDetailApplicantId");
-
-                    b.ToTable("EducationalDetails");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.GrantDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -180,17 +148,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("GrantDetail");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.EducationalDetail", b =>
-                {
-                    b.HasOne("Infrastructure.Models.ApplicantDetail", "ApplicantDetail")
-                        .WithMany()
-                        .HasForeignKey("ApplicantDetailApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicantDetail");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegisterAPI.Models;
 
@@ -11,9 +12,10 @@ using RegisterAPI.Models;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DetailsAPIDbContext))]
-    partial class DetailsAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020103017_applicationForeignKey")]
+    partial class applicationForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
